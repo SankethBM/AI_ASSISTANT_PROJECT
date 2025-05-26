@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+
   $(".text").textillate({
     loop: true,
     sync: true,
@@ -33,5 +35,14 @@ $(document).ready(function () {
       effect: "fadeOutUp",
       sync: true,
     },
+  });
+
+  // mic butto click event
+  $("#MicBtn").click(function () {
+    // eel.playAssistantSound()
+    $("#Oval").attr("hidden", true);
+    $("#SiriWave").attr("hidden", false);
+
+
   });
 });
