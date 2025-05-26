@@ -7,7 +7,7 @@ eel.init("frontend")
 
 playAssistantSound()
 
-os.system('microsoft-edge --app="http://localhost:5500/frontend/index.html"')
-
+os.system('start msedge.exe --app="http://localhost:8000/index.html"')
+ 
 eel.start('index.html', mode=None, host='localhost', block=True)
 
