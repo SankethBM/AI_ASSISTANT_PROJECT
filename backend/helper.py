@@ -23,7 +23,7 @@ def remove_words(input_string, words_to_remove):
     result_string = ' '.join(filtered_words)
 
     return result_string
-
+ 
 
 
 # key events like receive call, stop call, go back
@@ -52,3 +52,4 @@ def goback(key_code):
 # To replace space in string with %s for complete message send
 def replace_spaces_with_percent_s(input_string):
     return input_string.replace(' ', '%s')
+

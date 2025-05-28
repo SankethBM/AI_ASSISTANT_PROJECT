@@ -48,14 +48,33 @@ def allCommands():
         if "open" in query :
             from backend.features import openCommand
             openCommand(query)
-        elif "on youtube":
+
+        elif "on youtube" in query:
             from backend.features import PlayYoutube
             PlayYoutube(query)
+
+        elif "send message" in query or "phone call" in query or "video call" in query:
+            from backend.features import findContact, whatsApp
+            message=""
+            contact_no, name = findContact(query)
+            if(contact_no != 0):
+
+                if "send message" in query:
+                    message = 'message'
+                    speak("What message to send")
+                    query = takecommand()
+
+                elif "phone call" in query:
+                    message = 'phone call'
+                else:
+                    message = 'video call'
+                
+                whatsApp(contact_no, query, message, name)
 
         else:
             print("not run")
     except:
-        print("Error")
+        print("Error!!!!")
     
     
     eel.ShowHood()
