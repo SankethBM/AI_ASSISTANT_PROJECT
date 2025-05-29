@@ -44,7 +44,7 @@ cursor = con.cursor()
 
 
 # <----This is to add Single contact to DB ----->
-# query = "INSERT INTO contacts VALUES (null,'sam', '+919483146603', 'null')"
+# query = "INSERT INTO contacts VALUES (null,'zaid', '+919591712356', 'null')"
 # cursor.execute(query)
 # con.commit()
 
