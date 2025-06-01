@@ -4,6 +4,7 @@ import time
 import eel 
 
 def speak(text):
+    text=str(text)
     engine = pyttsx3.init("sapi5")
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
@@ -11,6 +12,7 @@ def speak(text):
     eel.DisplayMessage(text)
     # print(voices)
     engine.say(text)
+    eel.receiverText(text)
     engine.runAndWait()
 
 def takecommand():
@@ -44,8 +46,10 @@ def allCommands(message=1):
     if message == 1:
         query = takecommand()
         print(query)
+        eel.senderText(query)
     else:
         query = message
+        eel.senderText(query)
 
     try:
 
@@ -58,25 +62,39 @@ def allCommands(message=1):
             PlayYoutube(query)
 
         elif "send message" in query or "phone call" in query or "video call" in query:
-            from backend.features import findContact, whatsApp
-            message=""
+            from backend.features import findContact, whatsApp, makeCall, sendMessage
             contact_no, name = findContact(query)
             if(contact_no != 0):
+                speak("Which mode you want to use whatsapp or mobile")
+                preferance = takecommand()
+                print(preferance)
 
-                if "send message" in query:
-                    message = 'message'
-                    speak("What message to send")
-                    query = takecommand()
-
-                elif "phone call" in query:
-                    message = 'phone call'
-                else:
-                    message = 'video call'
-                
-                whatsApp(contact_no, query, message, name)
+                if "mobile" in preferance:
+                    if "send message" in query or "send sms" in query: 
+                        speak("what message to send")
+                        message = takecommand()
+                        sendMessage(message, contact_no, name)
+                    elif "phone call" in query:
+                        makeCall(name, contact_no)
+                    else:
+                        speak("please try again")
+                elif "whatsapp" in preferance:
+                    message = ""
+                    if "send message" in query:
+                        message = 'message'
+                        speak("what message to send")
+                        query = takecommand()
+                                        
+                    elif "phone call" in query:
+                        message = 'call'
+                    else:
+                        message = 'video call'
+                                        
+                    whatsApp(contact_no, query, message, name)
 
         else:
-            print("not run")
+            from backend.features import chatBot
+            chatBot(query)
     except:
         print("Error!!!!")
     
