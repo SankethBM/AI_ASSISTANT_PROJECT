@@ -195,20 +195,27 @@ def sendMessage(message, mobileNo, name):
     goback(4)
     time.sleep(1)
     keyEvent(3)
+    
     # open sms app
     tapEvents(136, 2220)
+    
     #start chat
-    tapEvents(819, 2192)
+    tapEvents(860, 210)
+    
     # search mobile no
     adbInput(mobileNo)
+    
     #tap on name
-    tapEvents(601, 574)
+    tapEvents(530, 530)
+    
     # tap on input
-    tapEvents(390, 2270)
+    tapEvents(310, 1210)
+    
     #message
     adbInput(message)
+    
     #send
-    tapEvents(957, 1397)
+    tapEvents(940, 1200)
     speak("message send successfully to "+name)
     
     

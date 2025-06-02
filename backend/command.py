@@ -86,7 +86,7 @@ def allCommands(message=1):
                         query = takecommand()
                                         
                     elif "phone call" in query:
-                        message = 'call'
+                        message = 'phone call'
                     else:
                         message = 'video call'
                                         

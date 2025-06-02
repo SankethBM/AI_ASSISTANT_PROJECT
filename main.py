@@ -13,10 +13,10 @@ def start():
     
     @eel.expose
     def init():
-        subprocess.call([r'device.bat'])
+        # subprocess.call([r'device.bat'])
         eel.hideLoader()
         speak("Ready for Face Authentication")
-        flag = recoganize.AuthenticateFace()
+        flag = AuthenticateFace()
         if flag == 1:
             eel.hideFaceAuth()
             speak("Face Authentication Successful !")
@@ -26,6 +26,8 @@ def start():
             playAssistantSound()
         else:
             speak("Face Authentication Failed !")
+            
+            
     os.system('start msedge.exe --app="http://localhost:8000/index.html"')
     
     eel.start('index.html', mode=None, host='localhost', block=True)

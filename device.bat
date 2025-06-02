@@ -11,7 +11,7 @@ echo Connecting to device with IP %ip%...
 "C:\platform-tools\adb.exe" connect %ip%
 
 rem Optional: reconnect to a known static IP
-set DEVICE_IP=192.0.0.4
+set DEVICE_IP=192.168.43.152
 set ADB_PORT=5555
 "C:\platform-tools\adb.exe" kill-server
 "C:\platform-tools\adb.exe" start-server
