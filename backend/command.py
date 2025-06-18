@@ -100,4 +100,3 @@ def allCommands(message=1):
     
     
     eel.ShowHood()
-

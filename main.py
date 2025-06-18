@@ -1,7 +1,7 @@
 import os
 import eel
 
-from backend.auth import recoganize
+from backend.auth import *
 from backend.auth.recoganize import AuthenticateFace
 from backend.features import *
 from backend.command import *

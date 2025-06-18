@@ -16,7 +16,7 @@ $(document).ready(function () {
         $("#Oval").attr("hidden", false);
         $("#SiriWave").attr("hidden", true);
     }
-    
+
 
     eel.expose(senderText)
     function senderText(message) {
@@ -49,7 +49,7 @@ $(document).ready(function () {
 
     }
 
-     // Hide Loader and display Face Auth animation
+    // Hide Loader and display Face Auth animation
     eel.expose(hideLoader)
     function hideLoader() {
 
