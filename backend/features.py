@@ -6,6 +6,7 @@ import subprocess
 import webbrowser
 from playsound import playsound
 import eel
+import time
 import pvporcupine
 import pyaudio
 import pyautogui 
@@ -15,9 +16,17 @@ from backend.helper import *
 from hugchat import hugchat
 import pywhatkit as kit
 import sqlite3
+import threading
+from gpt4all import GPT4All
 
 con = sqlite3.connect("jarvis.db")
 cursor = con.cursor()
+
+_MODEL_NAME = "Phi-3-mini-4k-instruct.Q4_0.gguf"  
+_gpt_model = None
+_model_loading = False
+
+
 
 # Playing Assistant voice
 @eel.expose
@@ -167,16 +176,74 @@ def whatsApp(mobile_no, message, flag, name):
     speak(jarvis_message)
 
 
+
+
+def _load_model_async():
+    global _gpt_model, _model_loading
+    if _gpt_model is None and not _model_loading:
+        _model_loading = True
+        try:
+            # This will download the model automatically on first run if needed
+            _gpt_model = GPT4All(_MODEL_NAME)
+            print(f"[GPT4All] model loaded: {_MODEL_NAME}")
+        except Exception as e:
+            print("Error loading GPT4All model:", e)
+            _gpt_model = None
+        finally:
+            _model_loading = False
+
+# Start loading model in background at module import (non-blocking)
+threading.Thread(target=_load_model_async, daemon=True).start()
+
+
 # chat bot 
+# def chatBot(query):
+#     user_input = query.lower()
+#     chatbot = hugchat.ChatBot(cookie_path="backend/cookies.json")
+#     id = chatbot.new_conversation()
+#     chatbot.change_conversation(id)
+#     response =  chatbot.chat(user_input)
+#     print(response)
+#     speak(response)
+#     return response
+
+@eel.expose
 def chatBot(query):
-    user_input = query.lower()
-    chatbot = hugchat.ChatBot(cookie_path="backend/cookies.json")
-    id = chatbot.new_conversation()
-    chatbot.change_conversation(id)
-    response =  chatbot.chat(user_input)
-    print(response)
-    speak(response)
-    return response
+    """
+    Replaces your old hugchat-based chatBot. Uses GPT4All local model.
+    Returns model response (string). Uses speak() to speak aloud as before.
+    """
+    global _gpt_model
+
+    user_input = (query or "").strip()
+    if not user_input:
+        speak("I didn't catch that. Please say it again.")
+        return ""
+
+    # If model not ready yet, notify user instead of crashing
+    if _gpt_model is None:
+        if _model_loading:
+            speak("Model is still loading. Please try again in a few seconds.")
+        else:
+            # Model failed to load or not found — attempt a synchronous reload
+            speak("Starting model download now. This may take a minute.")
+            _load_model_async()
+        return ""
+
+    try:
+        # Use a chat session (helps with instruction-tuned models)
+        with _gpt_model.chat_session():
+            # generate response (adjust max_tokens to taste)
+            response = _gpt_model.generate(user_input, max_tokens=512)
+        # speak + show
+        print("Model response:", response)
+        speak(response)
+        return response
+
+    except Exception as e:
+        print("GPT4All generation error:", e)
+        speak("Sorry, the local chatbot encountered a problem.")
+        return ""
 
 
 #call function in phone

@@ -3,6 +3,7 @@ import speech_recognition as sr
 import time
 import eel 
 
+@eel.expose
 def speak(text):
     text=str(text)
     engine = pyttsx3.init("sapi5")
@@ -24,7 +25,7 @@ def takecommand():
         r.pause_threshold = 1
         r.adjust_for_ambient_noise(source)
 
-        audio = r.listen(source, 10, 6)
+        audio = r.listen(source, 10, 8)
 
     try:
         print('recognizing...')
@@ -95,8 +96,9 @@ def allCommands(message=1):
         else:
             from backend.features import chatBot
             chatBot(query)
-    except:
-        print("Error!!!!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        speak("Sorry, something went wrong.")
     
     
     eel.ShowHood()
